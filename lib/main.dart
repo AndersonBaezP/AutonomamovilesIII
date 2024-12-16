@@ -1,41 +1,37 @@
 import 'package:flutter/material.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:prueba02/screens/welcome_Screen.dart';
-import 'firebase_options.dart';
+import 'package:prueba02/screens/AuthService.dart';
+import 'package:prueba02/screens/WelcomeScreen.dart';
+import 'package:prueba02/screens/NotesListScreen.dart';
+import 'package:prueba02/screens/CreateNoteScreen.dart';
+import 'package:provider/provider.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);  
-  runApp(const MainApp());
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Cuerpo(
-      
+    return ChangeNotifierProvider(
+      create: (context) => AuthService(),
+      child: MaterialApp(
+        title: 'Notas de Gastos',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: '/', // Ruta inicial
+        routes: {
+          '/': (context) => WelcomeScreen(),
+          '/notes': (context) => NotesListScreen(),
+          '/createNote': (context) => CreateNoteScreen(),
+        },
       ),
-    );
-  }
-}
-
-class Cuerpo extends StatelessWidget {
-  const Cuerpo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Libreria Virtual'),
-      ),
-      body: Welcome(),
     );
   }
 }
